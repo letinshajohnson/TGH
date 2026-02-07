@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+---------------------------------------------------------------------------------------------------------------
+GIF Explorer – Next.js Technical Assessment
+---------------------------------------------------------------------------------------------------------------
 
-## Getting Started
+A lightweight GIF Explorer web application built using Next.js, React, and TypeScript.
+The app allows users to search and browse GIFs using a public GIF API, similar to a simplified version of Giphy.
 
-First, run the development server:
+This project was implemented as part of a technical assessment, focusing on clean UI, performance, reusable components, and testing best practices.
 
-```bash
+
+Live Features
+---------------------------------------------------------------------------------------------------------------
+Search GIFs by keyword: Search is triggered only by pressing Enter or clicking the Search button
+Display results in a responsive grid layout
+Uniform GIF card width & height for consistent UI
+Click on a GIF to view a larger version in a modal
+Load More pagination without page refresh
+Skeleton loaders for better perceived performance
+Empty state when no GIFs are found
+Error handling UI for API failures
+Reusable and well-structured React components
+
+
+Tech Stack
+---------------------------------------------------------------------------------------------------------------
+Next.js (App Router)
+React + TypeScript
+Tailwind CSS
+Giphy Public API
+Jest & React Testing Library
+
+
+Setup Instructions
+---------------------------------------------------------------------------------------------------------------
+Install dependencies
+npm install
+
+Run the development server
+---------------------------------------------------------------------------------------------------------------
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Testing
+---------------------------------------------------------------------------------------------------------------
+This project includes both unit tests and integration tests.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run all tests
+npm test
 
-## Learn More
+Run tests in watch mode
+npm run test:watch
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Test Coverage Includes
+---------------------------------------------------------------------------------------------------------------
+Unit tests for reusable components (SearchBar, GifCard)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+Integration tests for:
+---------------------------------------------------------------------------------------------------------------
+Search flow
+API interaction (mocked)
+Empty results state
+Explicit user-triggered search behavior
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Production Build
+---------------------------------------------------------------------------------------------------------------
+npm run build
+npm run start
+
+Open:
+http://localhost:3000
+
+
+Design Decisions
+---------------------------------------------------------------------------------------------------------------
+Search is not auto-triggered while typing, strictly following the task requirement.
+GIF cards use fixed-size containers with object-fit: cover to prevent layout shifts.
+API calls are mocked in tests to ensure fast and deterministic results.
+Load More pagination appends results instead of refreshing the page.
+
+
+Possible Enhancements
+---------------------------------------------------------------------------------------------------------------
+Infinite scrolling
+Improved accessibility (ARIA roles, keyboard navigation)
+Caching using SWR or React Query
+GIF playback on hover
+
+
+Author
+---------------------------------------------------------------------------------------------------------------
+Letinsha Johnson
+Senior Full Stack Developer
