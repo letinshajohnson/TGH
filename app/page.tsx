@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SearchBar from '@/components/SearchBar';
 import GifGrid from '@/components/GifGrid';
 import GifModal from '@/components/GifModal';
@@ -9,14 +9,11 @@ import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { searchGifs } from '@/lib/giphy';
 import { Gif } from '@/types/gif';
-import { useDebounce } from '@/hooks/useDebounce';
 
 const LIMIT = 24;
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query);
-
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -28,14 +25,16 @@ export default function HomePage() {
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedGif, setSelectedGif] = useState<Gif | null>(null);
 
-  /** Initial search */
-  const fetchInitialGifs = async () => {
+  /** 🔍 Search triggered by Enter or Button */
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+
     try {
       setIsInitialLoading(true);
       setError('');
       setHasSearched(true);
 
-      const res = await searchGifs(debouncedQuery, LIMIT, 0);
+      const res = await searchGifs(query, LIMIT, 0);
 
       setGifs(res.data);
       setOffset(LIMIT);
@@ -47,12 +46,12 @@ export default function HomePage() {
     }
   };
 
-  /** Load more */
+  /** ➕ Load more */
   const loadMoreGifs = async () => {
     try {
       setIsLoadingMore(true);
 
-      const res = await searchGifs(debouncedQuery, LIMIT, offset);
+      const res = await searchGifs(query, LIMIT, offset);
 
       setGifs((prev) => [...prev, ...res.data]);
       setOffset((prev) => prev + LIMIT);
@@ -64,26 +63,18 @@ export default function HomePage() {
     }
   };
 
-  /** Debounced search trigger */
-  useEffect(() => {
-    if (debouncedQuery.trim()) {
-      setOffset(0);
-      fetchInitialGifs();
-    } else {
-      setGifs([]);
-      setHasSearched(false);
-    }
-  }, [debouncedQuery]);
-
   return (
     <main className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">GIF Explorer</h1>
 
-      <SearchBar value={query} onChange={setQuery} />
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        onSearch={handleSearch}
+      />
 
       {error && <ErrorState message={error} />}
 
-      {/* Initial loading */}
       {isInitialLoading && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
@@ -92,24 +83,21 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Results */}
       {!isInitialLoading && gifs.length > 0 && (
         <>
           <GifGrid gifs={gifs} onSelect={setSelectedGif} />
 
-          {/* Load More */}
           {hasMore && (
             <div className="flex justify-center mt-6">
               <button
                 onClick={loadMoreGifs}
                 disabled={isLoadingMore}
                 className="
-                  px-6 py-2 mt-6
-                  rounded-lg
-                  bg-black text-white text-sm
+                  px-6 py-2
+                  bg-black text-white
+                  rounded-lg text-sm
                   hover:bg-gray-800
                   disabled:opacity-50
-                  transition
                 "
               >
                 {isLoadingMore ? 'Loading...' : 'Load more'}
@@ -119,7 +107,6 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Empty state */}
       {!isInitialLoading && hasSearched && gifs.length === 0 && (
         <EmptyState
           title="No GIFs found 😕"
