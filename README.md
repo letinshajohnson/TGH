@@ -92,4 +92,5 @@ GIF playback on hover
 Author
 ---------------------------------------------------------------------------------------------------------------
 Letinsha Johnson
+
 Senior Full Stack Developer
